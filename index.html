@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) --> 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S8SFJRJ5W2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S8SFJRJ5W2');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyglot Books - Classics in Original Languages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f7f4;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23bdc3c7" width="1200" height="400"/><text x="50%" y="50%" font-size="48" fill="%23ffffff" text-anchor="middle" opacity="0.1">BOOKS</text></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-bar button {
+            padding: 0.75rem 2rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #2980b9;
+        }
+
+        /* Language Filter */
+        .language-filter {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid #3498db;
+            color: #3498db;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        /* Book Grid */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .book-translation {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-author {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-language {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #ecf0f1;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #2c3e50;
+            margin-bottom: 0.75rem;
+        }
+
+        .book-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            text-align: right;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #229954;
+        }
+
+        /* GA4 Comment Sections */
+        .ga4-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 2rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- GA4 TRACKING CODE - ADD YOUR MEASUREMENT ID HERE -->
+    <!-- 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+
+    <header>
+        <div class="header-content">
+            <div>
+                <div class="logo">📚 Polyglot Books</div>
+                <div class="tagline">Classics in Their Original Languages</div>
+            </div>
+            <nav>
+                <a href="#" onclick="trackNavigation('home')">Home</a>
+                <a href="#" onclick="trackNavigation('languages')">Languages</a>
+                <a href="#" onclick="trackNavigation('genres')">Genres</a>
+                <a href="#" onclick="trackNavigation('about')">About</a>
+                <div class="cart-icon" onclick="openCart()">
+                    🛒 Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Discover Classics in Their Original Beauty</h1>
+        <p>Read Dostoevsky in Russian, Proust in French, Cervantes in Spanish. Experience literature as it was meant to be.</p>
+    </div>
+
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for books, authors, or languages..." onkeyup="handleSearch(event)">
+            <button onclick="performSearch()">Search</button>
+        </div>
+    </div>
+
+    <div class="language-filter">
+        <h3>Filter by Language:</h3>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-lang="all" onclick="filterByLanguage('all')">All Languages</button>
+            <button class="filter-btn" data-lang="french" onclick="filterByLanguage('french')">🇫🇷 French</button>
+            <button class="filter-btn" data-lang="russian" onclick="filterByLanguage('russian')">🇷🇺 Russian</button>
+            <button class="filter-btn" data-lang="spanish" onclick="filterByLanguage('spanish')">🇪🇸 Spanish</button>
+            <button class="filter-btn" data-lang="german" onclick="filterByLanguage('german')">🇩🇪 German</button>
+            <button class="filter-btn" data-lang="japanese" onclick="filterByLanguage('japanese')">🇯🇵 Japanese</button>
+            <button class="filter-btn" data-lang="italian" onclick="filterByLanguage('italian')">🇮🇹 Italian</button>
+            <button class="filter-btn" data-lang="arabic" onclick="filterByLanguage('arabic')">🇸🇦 Arabic</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Featured Classics</h2>
+        
+        <div class="book-grid" id="bookGrid">
+            <!-- French Books -->
+            <div class="book-card" data-language="french" onclick="viewBook('les-miserables', 'French')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    Les Misérables
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Les Misérables</div>
+                    <div class="book-translation">"The Wretched"</div>
+                    <div class="book-author">Victor Hugo</div>
+                    <div class="book-language">🇫🇷 French</div>
+                    <div class="book-price">$24.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Les Misérables', 24.99, 'French')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="french" onclick="viewBook('madame-bovary', 'French')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    Madame Bovary
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Madame Bovary</div>
+                    <div class="book-translation">"Mrs. Bovary"</div>
+                    <div class="book-author">Gustave Flaubert</div>
+                    <div class="book-language">🇫🇷 French</div>
+                    <div class="book-price">$19.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Madame Bovary', 19.99, 'French')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="french" onclick="viewBook('le-petit-prince', 'French')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    Le Petit Prince
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Le Petit Prince</div>
+                    <div class="book-translation">"The Little Prince"</div>
+                    <div class="book-author">Antoine de Saint-Exupéry</div>
+                    <div class="book-language">🇫🇷 French</div>
+                    <div class="book-price">$16.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Le Petit Prince', 16.99, 'French')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Russian Books -->
+            <div class="book-card" data-language="russian" onclick="viewBook('war-and-peace', 'Russian')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    Война и миръ
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Война и миръ</div>
+                    <div class="book-translation">"War and Peace"</div>
+                    <div class="book-author">Лев Толстой (Leo Tolstoy)</div>
+                    <div class="book-language">🇷🇺 Russian</div>
+                    <div class="book-price">$34.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Война и миръ', 34.99, 'Russian')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="russian" onclick="viewBook('crime-punishment', 'Russian')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                    Преступление и наказание
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Преступление и наказание</div>
+                    <div class="book-translation">"Crime and Punishment"</div>
+                    <div class="book-author">Фёдор Достоевский</div>
+                    <div class="book-language">🇷🇺 Russian</div>
+                    <div class="book-price">$26.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Преступление и наказание', 26.99, 'Russian')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="russian" onclick="viewBook('anna-karenina', 'Russian')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    Анна Каренина
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Анна Каренина</div>
+                    <div class="book-translation">"Anna Karenina"</div>
+                    <div class="book-author">Лев Толстой</div>
+                    <div class="book-language">🇷🇺 Russian</div>
+                    <div class="book-price">$28.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Анна Каренина', 28.99, 'Russian')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Spanish Books -->
+            <div class="book-card" data-language="spanish" onclick="viewBook('don-quixote', 'Spanish')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                    Don Quijote de la Mancha
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Don Quijote de la Mancha</div>
+                    <div class="book-translation">"Don Quixote"</div>
+                    <div class="book-author">Miguel de Cervantes</div>
+                    <div class="book-language">🇪🇸 Spanish</div>
+                    <div class="book-price">$29.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Don Quijote', 29.99, 'Spanish')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="spanish" onclick="viewBook('cien-anos', 'Spanish')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    Cien años de soledad
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Cien años de soledad</div>
+                    <div class="book-translation">"One Hundred Years of Solitude"</div>
+                    <div class="book-author">Gabriel García Márquez</div>
+                    <div class="book-language">🇪🇸 Spanish</div>
+                    <div class="book-price">$22.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Cien años de soledad', 22.99, 'Spanish')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- German Books -->
+            <div class="book-card" data-language="german" onclick="viewBook('faust', 'German')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);">
+                    Faust
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Faust</div>
+                    <div class="book-translation">"Faust"</div>
+                    <div class="book-author">Johann Wolfgang von Goethe</div>
+                    <div class="book-language">🇩🇪 German</div>
+                    <div class="book-price">$21.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Faust', 21.99, 'German')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="german" onclick="viewBook('metamorphosis', 'German')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
+                    Die Verwandlung
+                </div>
+                <div class="book-info">
+                    <div class="book-title">Die Verwandlung</div>
+                    <div class="book-translation">"The Metamorphosis"</div>
+                    <div class="book-author">Franz Kafka</div>
+                    <div class="book-language">🇩🇪 German</div>
+                    <div class="book-price">$17.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'Die Verwandlung', 17.99, 'German')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Japanese Books -->
+            <div class="book-card" data-language="japanese" onclick="viewBook('kokoro', 'Japanese')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);">
+                    こゝろ
+                </div>
+                <div class="book-info">
+                    <div class="book-title">こゝろ (Kokoro)</div>
+                    <div class="book-translation">"The Heart"</div>
+                    <div class="book-author">夏目漱石 (Natsume Sōseki)</div>
+                    <div class="book-language">🇯🇵 Japanese</div>
+                    <div class="book-price">$23.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'こゝろ', 23.99, 'Japanese')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="book-card" data-language="japanese" onclick="viewBook('snow-country', 'Japanese')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%);">
+                    雪国
+                </div>
+                <div class="book-info">
+                    <div class="book-title">雪国 (Yukiguni)</div>
+                    <div class="book-translation">"Snow Country"</div>
+                    <div class="book-author">川端康成 (Kawabata Yasunari)</div>
+                    <div class="book-language">🇯🇵 Japanese</div>
+                    <div class="book-price">$20.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, '雪国', 20.99, 'Japanese')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Italian Books -->
+            <div class="book-card" data-language="italian" onclick="viewBook('divine-comedy', 'Italian')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                    La Divina Commedia
+                </div>
+                <div class="book-info">
+                    <div class="book-title">La Divina Commedia</div>
+                    <div class="book-translation">"The Divine Comedy"</div>
+                    <div class="book-author">Dante Alighieri</div>
+                    <div class="book-language">🇮🇹 Italian</div>
+                    <div class="book-price">$27.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'La Divina Commedia', 27.99, 'Italian')">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Arabic Books -->
+            <div class="book-card" data-language="arabic" onclick="viewBook('arabian-nights', 'Arabic')">
+                <div class="book-cover" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);">
+                    ألف ليلة وليلة
+                </div>
+                <div class="book-info">
+                    <div class="book-title">ألف ليلة وليلة</div>
+                    <div class="book-translation">"One Thousand and One Nights"</div>
+                    <div class="book-author">Various Authors</div>
+                    <div class="book-language">🇸🇦 Arabic</div>
+                    <div class="book-price">$31.99</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(event, 'ألف ليلة وليلة', 31.99, 'Arabic')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ga4-note">
+            📊 GA4 TRACKING OPPORTUNITIES:
+            - Page views (automatic)
+            - Book view clicks (viewBook function)
+            - Add to cart events (addToCart function)
+            - Language filter usage (filterByLanguage function)
+            - Search queries (performSearch function)
+            - Navigation clicks (trackNavigation function)
+            - Cart opens (openCart function)
+            - Checkout initiation (checkout function)
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Shopping Cart</h2>
+                <span class="close-modal" onclick="closeCart()">✕</span>
+            </div>
+            <div id="cartItems">
+                <p style="text-align: center; color: #7f8c8d;">Your cart is empty</p>
+            </div>
+            <div class="cart-total" id="cartTotal"></div>
+            <button class="checkout-btn" onclick="checkout()" style="display: none;" id="checkoutBtn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Polyglot Books. Experience literature in its original form.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">Built for GA4 tracking practice</p>
+    </footer>
+
+    <script>
+        // Shopping cart state
+        let cart = [];
+
+        // Add to cart function
+        function addToCart(event, title, price, language) {
+            event.stopPropagation();
+            
+            cart.push({ title, price, language });
+            document.getElementById('cartCount').innerText = cart.length;
+
+            // Update cart modal content
+            updateCartDisplay();
+
+            // GA4 tracking
+            gtag('event', 'add_to_cart', {
+                items: [{
+                    item_name: title,
+                    price: price,
+                    language: language
+                }]
+            });
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align:center; color:#7f8c8d;">Your cart is empty</p>';
+                cartTotal.innerText = '';
+                checkoutBtn.style.display = 'none';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <span>${item.title} (${item.language})</span>
+                    <span>$${item.price.toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.innerText = 'Total: $' + total.toFixed(2);
+            checkoutBtn.style.display = 'block';
+        }
+
+        function openCart() {
+            document.getElementById('cartModal').classList.add('active');
+            updateCartDisplay();
+
+            // GA4 event
+            gtag('event', 'view_cart');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        function checkout() {
+            alert('Checkout process started!');
+            gtag('event', 'begin_checkout');
+        }
+
+        function filterByLanguage(lang) {
+            const books = document.querySelectorAll('.book-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+
+            books.forEach(book => {
+                if (lang === 'all' || book.dataset.language === lang) {
+                    book.style.display = 'block';
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+
+            gtag('event', 'filter_language', { language: lang });
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const books = document.querySelectorAll('.book-card');
+
+            books.forEach(book => {
+                const title = book.querySelector('.book-title').innerText.toLowerCase();
+                const author = book.querySelector('.book-author').innerText.toLowerCase();
+                if (title.includes(query) || author.includes(query)) {
+                    book.style.display = 'block';
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+
+            gtag('event', 'search', { search_term: query });
+        }
+
+        function trackNavigation(page) {
+            gtag('event', 'navigation_click', { page });
+        }
+
+        function viewBook(title, language) {
+            gtag('event', 'view_item', {
+                items: [{
+                    item_name: title,
+                    language: language
+                }]
+            });
+        }
+    </script>
+</body>
+</html>
