@@ -914,6 +914,11 @@ window.addEventListener('load', () => {
     const hasCart = localStorage.getItem('has_cart_items');
     const lastVisit = localStorage.getItem('last_visit');
     
+    console.log('Debug - cartStartTime:', cartStartTime);
+    console.log('Debug - hasCart:', hasCart);
+    console.log('Debug - lastVisit:', lastVisit);
+    console.log('Debug - current cart length:', cart.length);
+    
     // If they had items in cart and this is a new session (different day or after closing browser)
     if (cartStartTime && hasCart === 'true' && lastVisit) {
         const timeSinceLastVisit = Date.now() - parseInt(lastVisit);
