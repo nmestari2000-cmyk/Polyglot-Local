@@ -934,7 +934,7 @@ if (cartStartTime && hasCart === 'true' && lastVisit) {
             gtag('event', 'abandon_cart', {
                 cart_value: getCartValue(),
                 items_in_cart: cart.length,
-                time_since_last_visit: Math.floor(timeSinceLastVisit / 60000) // minutes
+                time_since_last_visit: Math.floor(timeSinceCartCreated / 60000) // minutes
             });
             
             // Clear abandonment flags but keep cart items
