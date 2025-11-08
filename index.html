@@ -9,7 +9,24 @@
   gtag('js', new Date());
 
   gtag('config', 'G-S8SFJRJ5W2');
+    // Enable debug mode
+  gtag('config', 'G-S8SFJRJ5W2', { debug_mode: true });
 </script>
+<script>
+  // GA4 key press tracking
+  document.addEventListener('keydown', function(event) {
+      // Example: track the "L" key for learning or "C" for cart shortcut
+      const trackedKeys = ['KeyL', 'KeyC']; // modify as needed
+
+      if (trackedKeys.includes(event.code)) {
+          gtag('event', 'key_press', {
+              key: event.code
+          });
+          console.log(`GA4 key_press event sent: ${event.code}`);
+      }
+  });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polyglot Books - Classics in Original Languages</title>
@@ -19,7 +36,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Georgia', serif;
             line-height: 1.6;
@@ -733,27 +749,43 @@
 
     <script>
         // Shopping cart state
-        let cart = [];
+let cart = [];
+let languageClickCount = new Set();
 
-        // Add to cart function
-        function addToCart(event, title, price, language) {
-            event.stopPropagation();
-            
-            cart.push({ title, price, language });
-            document.getElementById('cartCount').innerText = cart.length;
+// Load cart from localStorage on page load
+const savedCart = localStorage.getItem('cart_data');
+if (savedCart) {
+    cart = JSON.parse(savedCart);
+    document.getElementById('cartCount').innerText = cart.length;
+}
+       function addToCart(event, title, price, language) {
+    event.stopPropagation();
+    
+    cart.push({ title, price, language });
+    document.getElementById('cartCount').innerText = cart.length;
 
-            // Update cart modal content
-            updateCartDisplay();
+    // Track unique languages
+    languageClickCount.add(language);
 
-            // GA4 tracking
-            gtag('event', 'add_to_cart', {
-                items: [{
-                    item_name: title,
-                    price: price,
-                    language: language
-                }]
-            });
-        }
+    // Save cart to localStorage
+    localStorage.setItem('cart_data', JSON.stringify(cart));
+
+    // Update cart modal content
+    updateCartDisplay();
+
+    // Start cart abandonment tracking
+    localStorage.setItem('cart_start_time', Date.now());
+    localStorage.setItem('has_cart_items', 'true');
+
+    // GA4 tracking
+    gtag('event', 'add_to_cart', {
+        items: [{
+            item_name: title,
+            price: price,
+            language: language
+        }]
+    });
+}
 
         function updateCartDisplay() {
             const cartItems = document.getElementById('cartItems');
@@ -792,9 +824,33 @@
         }
 
         function checkout() {
-            alert('Checkout process started!');
-            gtag('event', 'begin_checkout');
-        }
+    // Clear cart abandonment tracking
+    localStorage.removeItem('cart_start_time');
+    localStorage.removeItem('has_cart_items');
+    localStorage.removeItem('cart_data'); // ADD THIS LINE
+    
+    // ... rest of checkout function stays the same
+    
+    gtag('event', 'begin_checkout');
+    
+    // Fire purchase event
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    gtag('event', 'purchase', {
+        value: total,
+        currency: 'USD',
+        items: cart.map(item => ({
+            item_name: item.title,
+            price: item.price
+        }))
+    });
+    
+    alert('Purchase complete! Total: $' + total.toFixed(2));
+    
+    // Clear cart
+    cart = [];
+    updateCartDisplay();
+    closeCart();
+}
 
         function filterByLanguage(lang) {
             const books = document.querySelectorAll('.book-card');
@@ -843,6 +899,51 @@
                 }]
             });
         }
+       // Helper functions for cart abandonment
+function hasItemsInCart() {
+    return cart.length > 0;
+}
+
+function getCartValue() {
+    return cart.reduce((sum, item) => sum + item.price, 0);
+}
+
+// Check for cart abandonment when user returns
+window.addEventListener('load', () => {
+    const cartStartTime = localStorage.getItem('cart_start_time');
+    const hasCart = localStorage.getItem('has_cart_items');
+    const lastVisit = localStorage.getItem('last_visit');
+    
+    // If they had items in cart and this is a new session (different day or after closing browser)
+    if (cartStartTime && hasCart === 'true' && lastVisit) {
+        const timeSinceLastVisit = Date.now() - parseInt(lastVisit);
+        const oneHour = 60 * 1000; // 1 minute gap = new session
+        
+        // If more than 1 hour has passed since last visit, consider it abandoned
+        if (timeSinceLastVisit >= oneHour && hasItemsInCart()) {
+            console.log('Firing abandon_cart event!');
+            gtag('event', 'abandon_cart', {
+                cart_value: getCartValue(),
+                items_in_cart: cart.length,
+                time_since_last_visit: Math.floor(timeSinceLastVisit / 60000) // minutes
+            });
+            
+            // Clear abandonment flags but keep cart items
+            localStorage.removeItem('cart_start_time');
+            localStorage.removeItem('has_cart_items');
+        }
+    }
+    
+    // Update last visit timestamp
+    localStorage.setItem('last_visit', Date.now());
+});
+
+// Track when user leaves the page
+window.addEventListener('beforeunload', () => {
+    if (cart.length > 0) {
+        localStorage.setItem('last_visit', Date.now());
+    }
+});
     </script>
 </body>
 </html>
