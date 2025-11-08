@@ -920,12 +920,16 @@ window.addEventListener('load', () => {
     console.log('Debug - current cart length:', cart.length);
     
     // If they had items in cart and this is a new session (different day or after closing browser)
-    if (cartStartTime && hasCart === 'true' && lastVisit) {
-        const timeSinceLastVisit = Date.now() - parseInt(lastVisit);
-        const oneHour = 60 * 1000; // 1 minute gap = new session
-        
-        // If more than 1 hour has passed since last visit, consider it abandoned
-        if (timeSinceLastVisit >= oneHour && hasItemsInCart()) {
+if (cartStartTime && hasCart === 'true' && lastVisit) {
+    const timeSinceCartCreated = Date.now() - parseInt(cartStartTime);
+    const timeBetweenVisits = Date.now() - parseInt(lastVisit);
+    const oneHour = 60 * 1000; // 1 minute for testing
+    
+    console.log('Debug - timeSinceCartCreated (ms):', timeSinceCartCreated);
+    console.log('Debug - timeBetweenVisits (ms):', timeBetweenVisits);
+    
+    // If cart was created more than 1 hour ago AND they just returned (new session)
+    if (timeSinceCartCreated >= oneHour && timeBetweenVisits < 10000 && hasItemsInCart()) {
             console.log('Firing abandon_cart event!');
             gtag('event', 'abandon_cart', {
                 cart_value: getCartValue(),
