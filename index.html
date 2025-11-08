@@ -773,6 +773,9 @@ if (savedCart) {
     // Update cart modal content
     updateCartDisplay();
 
+    // Set customer segment
+    setCustomerSegment('Engaged Browser'); // ADD THIS LINE
+
     // Start cart abandonment tracking
     localStorage.setItem('cart_start_time', Date.now());
     localStorage.setItem('has_cart_items', 'true');
@@ -827,14 +830,31 @@ if (savedCart) {
     // Clear cart abandonment tracking
     localStorage.removeItem('cart_start_time');
     localStorage.removeItem('has_cart_items');
-    localStorage.removeItem('cart_data'); // ADD THIS LINE
+    localStorage.removeItem('cart_data');
     
-    // ... rest of checkout function stays the same
+    // Get unique languages from cart
+    const uniqueLanguages = new Set(cart.map(item => item.language));
+    
+    // Fire key event if 2+ languages
+    if (uniqueLanguages.size >= 2) {
+        gtag('event', 'multi_language_purchase', {
+            language_count: uniqueLanguages.size,
+            languages: Array.from(uniqueLanguages).join(', ')
+        });
+    }
     
     gtag('event', 'begin_checkout');
     
     // Fire purchase event
     const total = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    // Set customer segment based on purchase value
+    if (total >= 55) {
+        setCustomerSegment('High Value'); // ADD THIS
+    } else {
+        setCustomerSegment('Standard Customer'); // ADD THIS
+    }
+    
     gtag('event', 'purchase', {
         value: total,
         currency: 'USD',
@@ -906,6 +926,12 @@ function hasItemsInCart() {
 
 function getCartValue() {
     return cart.reduce((sum, item) => sum + item.price, 0);
+}
+// Set user property for customer segment
+function setCustomerSegment(segment) {
+    gtag('set', 'user_properties', {
+        customer_value_segment: segment
+    });
 }
 
 // Check for cart abandonment when user returns
