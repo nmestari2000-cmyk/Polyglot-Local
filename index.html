@@ -827,15 +827,42 @@ if (savedCart) {
         }
 
         function checkout() {
-    // Clear cart abandonment tracking
-    localStorage.removeItem('cart_start_time');
-    localStorage.removeItem('has_cart_items');
-    localStorage.removeItem('cart_data');
+    // Check if cart has items
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
     
     // Get unique languages from cart
     const uniqueLanguages = new Set(cart.map(item => item.language));
     
-    // Fire key event if 2+ languages
+    // Save cart data to localStorage for payment page
+    localStorage.setItem('checkoutCart', JSON.stringify(cart));
+    
+    // Calculate total
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    // Set customer segment based on purchase value (save for later)
+    if (total >= 55) {
+        localStorage.setItem('customerSegment', 'High Value');
+    } else {
+        localStorage.setItem('customerSegment', 'Standard Customer');
+    }
+    
+    // Fire begin_checkout event
+    gtag('event', 'begin_checkout', {
+        currency: 'USD',
+        value: total,
+        items: cart.map(item => ({
+            item_id: item.title.replace(/\s+/g, '_').toLowerCase(),
+            item_name: item.title,
+            price: item.price,
+            item_category: item.language,
+            quantity: 1
+        }))
+    });
+    
+    // Fire multi-language event if applicable
     if (uniqueLanguages.size >= 2) {
         gtag('event', 'multi_language_purchase', {
             language_count: uniqueLanguages.size,
@@ -843,33 +870,11 @@ if (savedCart) {
         });
     }
     
-    gtag('event', 'begin_checkout');
+    console.log('✅ begin_checkout event fired');
+    console.log('Redirecting to payment page...');
     
-    // Fire purchase event
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    
-    // Set customer segment based on purchase value
-    if (total >= 55) {
-        setCustomerSegment('High Value'); // ADD THIS
-    } else {
-        setCustomerSegment('Standard Customer'); // ADD THIS
-    }
-    
-    gtag('event', 'purchase', {
-        value: total,
-        currency: 'USD',
-        items: cart.map(item => ({
-            item_name: item.title,
-            price: item.price
-        }))
-    });
-    
-    alert('Purchase complete! Total: $' + total.toFixed(2));
-    
-    // Clear cart
-    cart = [];
-    updateCartDisplay();
-    closeCart();
+    // Redirect to payment page (THIS IS THE KEY LINE!)
+    window.location.href = 'payment.html';
 }
 
         function filterByLanguage(lang) {
