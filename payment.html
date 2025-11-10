@@ -532,16 +532,32 @@
             console.log('Payment method:', paymentMethod);
 
             // Simulate external redirect for PayPal
-            if (paymentMethod === 'paypal') {
-                alert('🔄 Redirecting to PayPal...\n\n(In a real scenario, this would be external traffic to paypal.com)');
-                console.log('🚨 EXTERNAL TRAFFIC: Redirecting to paypal.com');
-                console.log('This is where you would test blocking external referrals in GA4!');
-            }
-
-            // Redirect to confirmation page after brief delay
-            setTimeout(() => {
-                window.location.href = 'confirmation.html';
-            }, 500);
+if (paymentMethod === 'paypal') {
+    alert('🔄 Redirecting to PayPal...\n\n(Simulating external traffic)');
+    console.log('🚨 EXTERNAL TRAFFIC: Redirecting to paypal.com');
+    console.log('This is where you would test blocking external referrals in GA4!');
+    
+    // Store transaction data before leaving
+    localStorage.setItem('paypalTransaction', JSON.stringify({
+        transactionId: transactionId,
+        timestamp: new Date().toISOString()
+    }));
+    
+    // Simulate external redirect with return parameter
+    const returnUrl = encodeURIComponent(window.location.origin + '/confirmation.html?source=paypal&txn=' + transactionId);
+    const externalUrl = 'https://www.paypal.com/checkout?return_url=' + returnUrl;
+    
+    // For testing: redirect after 2 seconds (simulating external processing)
+    setTimeout(() => {
+        // This simulates the external redirect back to your site
+        window.location.href = 'confirmation.html?source=paypal&txn=' + transactionId + '&referrer=external';
+    }, 2000);
+} else {
+    // Redirect to confirmation page after brief delay (internal flow)
+    setTimeout(() => {
+        window.location.href = 'confirmation.html?source=' + paymentMethod + '&referrer=internal';
+    }, 500);
+}
         });
 
         // Handle payment method selection
